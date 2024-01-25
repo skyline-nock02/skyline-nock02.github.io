@@ -41,14 +41,16 @@
 </head>
 <body>
 
+<p id="prompt">1. Prompt</p>
+
 <div class="video-container">
-    <video id="video1" width="512" height="512" controls autoplay loop muted>
+    <video id="baseline_video" width="512" height="512" controls autoplay loop muted>
         <source src="video1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
-    <video id="video2" width="512" height="512" controls autoplay loop muted>
-        <source src="video2.mp4" type="video/mp4">
+    <video id="our_video" width="512" height="512" controls autoplay loop muted>
+        <source src="video1.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </div>
@@ -62,27 +64,30 @@
 <div class="reason-selection" id="reasonSelection">
     <label for="reason">Which video you prefer?</label>
     <ul class="checkbox-list">
-        <li><label><input type="radio" name="which" value="video1"> Video 1</label></li>
-        <li><label><input type="radio" name="which" value="video2"> Video 2</label></li>
-        <li><label><input type="radio" name="which" value="onpar"> On par</label></li>
+        <li><label><input type="radio" name="which" value="0"> Video 1</label></li>
+        <li><label><input type="radio" name="which" value="1"> Video 2</label></li>
+        <li><label><input type="radio" name="which" value="2"> On par</label></li>
     </ul>
 </div>
 
 <div class="reason-selection" id="reasonSelection">
     <label for="reason">Why do you prefer this video?</label>
     <ul class="checkbox-list">
-        <li><label><input type="checkbox" name="reason" value="entertainment"> Entertainment</label></li>
-        <li><label><input type="checkbox" name="reason" value="information"> Information</label></li>
-        <li><label><input type="checkbox" name="reason" value="visuals"> Visuals</label></li>
-        <li><label><input type="checkbox" name="reason" value="other"> Other</label></li>
+        <li><label><input type="checkbox" name="reason" value="0"> Entertainment</label></li>
+        <li><label><input type="checkbox" name="reason" value="1"> Information</label></li>
+        <li><label><input type="checkbox" name="reason" value="2"> Visuals</label></li>
+        <li><label><input type="checkbox" name="reason" value="3"> Other</label></li>
     </ul>
 </div>
-<button id="replaceVideoButton">Next</button>
-<button onclick="saveToFile()">Save to File</button>
+<button id="previousVideoButton">Previous</button>
+<button id="nextVideoButton">Next</button>
+<button onclick="saveToFile()">Save Results</button>
 
 <script>
     // var selectedVideo = 0; // To store the selected video
     var selectedReasons = []; // To store the selected reasons
+
+    var currentVideoId = 1;
 
     function saveToFile() {
         selectedVideos = [];
@@ -132,11 +137,41 @@
         video.play();
     }
 
-    document.getElementById('replaceVideoButton').addEventListener('click', function () {
+    document.getElementById('nextVideoButton').addEventListener('click', function () {
             // Assuming you have a new video file URL
-            replaceVideo('video1', 'video3.mp4')
-            replaceVideo('video2', 'video3.mp4')
+            if (currentVideoId==3) {
+                return;
+            } else {
+                currentVideoId += 1
+                replaceVideo('baseline_video', 'video' + currentVideoId.toString() + '.mp4')
+                replaceVideo('our_video', 'video' + currentVideoId.toString() + '.mp4')
+                changePrompt(currentVideoId.toString() + '. Prompt')
+            }
         });
+    document.getElementById('previousVideoButton').addEventListener('click', function () {
+            if (currentVideoId==1) {
+                return;
+            } else {
+                currentVideoId -= 1
+                replaceVideo('baseline_video', 'video' + currentVideoId.toString() + '.mp4')
+                replaceVideo('our_video', 'video' + currentVideoId.toString() + '.mp4')
+                changePrompt(currentVideoId.toString() + '. Prompt')
+            }
+        });
+    function changePrompt(prompt) {
+        // Get the text block element
+        var textBlock = document.getElementById("prompt");
+        textBlock.innerHTML = prompt
+        // // Check the current text content
+        // if (textBlock.innerHTML === "This is the initial text.") {
+        //     // If the current text is the initial text, change it to something else
+        //     textBlock.innerHTML = "Text changed!";
+        // } else {
+        //     // If the current text is not the initial text, change it back to the initial text
+        //     textBlock.innerHTML = "This is the initial text.";
+        // }
+    }
+
 
 </script>
 

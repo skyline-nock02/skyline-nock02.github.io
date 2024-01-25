@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Preference Example</title>
+    <style>
+        .video-container {
+            display: flex;
+        }
+
+        .video-container video {
+            margin-right: 10px;
+        }
+
+        .selection-buttons {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .selection-buttons button {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .reason-selection {
+            margin-top: 10px;
+        }
+
+        .checkbox-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checkbox-list label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container">
+    <video id="video1" width="512" height="512" controls autoplay loop muted>
+        <source src="video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <video id="video2" width="512" height="512" controls autoplay loop muted>
+        <source src="video2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<!-- <div class="selection-buttons">
+    <button onclick="selectVideo(1)">Select Video 1</button>
+    <button onclick="selectVideo(2)">Select Video 2</button>
+</div> -->
+
+
+<div class="reason-selection" id="reasonSelection">
+    <label for="reason">Which video you prefer?</label>
+    <ul class="checkbox-list">
+        <li><label><input type="radio" name="which" value="video1"> Video 1</label></li>
+        <li><label><input type="radio" name="which" value="video2"> Video 2</label></li>
+        <li><label><input type="radio" name="which" value="onpar"> On par</label></li>
+    </ul>
+</div>
+
+<div class="reason-selection" id="reasonSelection">
+    <label for="reason">Why do you prefer this video?</label>
+    <ul class="checkbox-list">
+        <li><label><input type="checkbox" name="reason" value="entertainment"> Entertainment</label></li>
+        <li><label><input type="checkbox" name="reason" value="information"> Information</label></li>
+        <li><label><input type="checkbox" name="reason" value="visuals"> Visuals</label></li>
+        <li><label><input type="checkbox" name="reason" value="other"> Other</label></li>
+    </ul>
+</div>
+<button id="replaceVideoButton">Next</button>
+<button onclick="saveToFile()">Save to File</button>
+
+<script>
+    // var selectedVideo = 0; // To store the selected video
+    var selectedReasons = []; // To store the selected reasons
+
+    function saveToFile() {
+        selectedVideos = [];
+        var selectedCheckbox = document.querySelector('input[name="which"]:checked');
+        
+        if (selectedCheckbox) {
+            selectedVideos.push(selectedCheckbox.value);
+        }
+    
+        selectedReasons = [];
+        var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
+        checkboxes.forEach(function (checkbox) {
+            selectedReasons.push(checkbox.value);
+        });
+
+        // Create a Blob with the selected data
+        var blob = new Blob([`Selected Video: ${selectedVideos.join(", ")}\nReasons: ${selectedReasons.join(", ")}`], { type: "text/plain" });
+        
+        // Create a download link
+        var downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = "user_selection.txt";
+        
+        // Trigger the download
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+
+    function replaceVideo(old_video_id, newVideoURL) {
+        // Assuming you have a new video file URL
+        var video = document.getElementById(old_video_id);
+
+        // Remove existing source element
+        while (video.firstChild) {
+            video.removeChild(video.firstChild);
+        }
+
+        // Create a new source element with the new video file
+        var source = document.createElement('source');
+        source.src = newVideoURL;
+        source.type = 'video/mp4';
+
+        // Append the new source element to the video
+        video.appendChild(source);
+
+        video.play();
+    }
+
+    document.getElementById('replaceVideoButton').addEventListener('click', function () {
+            // Assuming you have a new video file URL
+            replaceVideo('video1', 'video3.mp4')
+            replaceVideo('video2', 'video3.mp4')
+        });
+
+</script>
+
+</body>
+</html>

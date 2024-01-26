@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Preference Example</title>
     <style>
+        .button-container {
+            display: flex;
+        }
+
+        .button-container button {
+            margin-right: 10px; /* Adjust the margin as needed */
+        }
+
         .video-container {
             display: flex;
         }
@@ -67,16 +75,36 @@
 </div> -->
 
 
-<div class="reason-selection" id="reasonSelection">
-    <label for="reason">Which video do you prefer? (single choice)</label>
-    <ul class="checkbox-list">
-        <li><label><input type="radio" name="which" value="0" onchange="handleRadioButtonChange(this)"> Left</label></li>
-        <li><label><input type="radio" name="which" value="1" onchange="handleRadioButtonChange(this)"> Right</label></li>
-        <li><label><input type="radio" name="which" value="2" onchange="handleRadioButtonChange(this)"> On par</label></li>
+<div class="reason-selection">
+    <label for="reason">Which object has more realistic coloring?</label>
+    <ul class="checkbox-list button-container">
+        <li><label><input type="radio" name="colorSelection" value="0" onchange="handleRadioButtonChange(this)"> Left</label></li>
+        <li><label><input type="radio" name="colorSelection" value="1" onchange="handleRadioButtonChange(this)"> Right</label></li>
+    </ul>
+</div>
+<div class="reason-selection">
+    <label for="reason">Which object has better geometry?</label>
+    <ul class="checkbox-list button-container">
+        <li><label><input type="radio" name="geometrySelection" value="0" onchange="handleRadioButtonChange(this)"> Left</label></li>
+        <li><label><input type="radio" name="geometrySelection" value="1" onchange="handleRadioButtonChange(this)"> Right</label></li>
+    </ul>
+</div>
+<div class="reason-selection">
+    <label for="reason">Which object better represents the text prompt?</label>
+    <ul class="checkbox-list button-container">
+        <li><label><input type="radio" name="alignSelection" value="0" onchange="handleRadioButtonChange(this)"> Left</label></li>
+        <li><label><input type="radio" name="alignSelection" value="1" onchange="handleRadioButtonChange(this)"> Right</label></li>
+    </ul>
+</div>
+<div class="reason-selection">
+    <label for="reason">Which object do you prefer overall?</label>
+    <ul class="checkbox-list button-container">
+        <li><label><input type="radio" name="overallSelection" value="0" onchange="handleRadioButtonChange(this)"> Left</label></li>
+        <li><label><input type="radio" name="overallSelection" value="1" onchange="handleRadioButtonChange(this)"> Right</label></li>
     </ul>
 </div>
 
-<div class="reason-selection" id="reasonSelection">
+<!-- <div class="reason-selection" id="reasonSelection">
     <label for="reason">Why do you prefer it? (multiple choice)</label>
     <ul class="checkbox-list">
         <li><label><input type="checkbox" name="reason" value="0" onchange="handleCheckBoxChange(this)"> Image looks more sharp</label></li>
@@ -86,7 +114,7 @@
         <li><label><input type="checkbox" name="reason" value="4" onchange="handleCheckBoxChange(this)"> Object is more compete</label></li>
         <li><label><input type="checkbox" name="reason" value="5" onchange="handleCheckBoxChange(this)"> Video is less noisy</label></li>
     </ul>
-</div>
+</div> -->
 <div>
     <br>
     <button id="previousVideoButton">Previous</button>
@@ -111,8 +139,12 @@
         selected_baseline_method_names.push(baseline_method_name);
         results[i] = {
             "baseline_method_name": baseline_method_name,
-            "which": -1,
-            "reason": [],
+            "colorSelection": "-1",
+            "geometrySelection": "-1",
+            "alignSelection": "-1",
+            "overallSelection": "-1",
+            // "which": -1,
+            // "reason": [],
         };
     }
     // console.log(selected_baseline_method_names)
@@ -123,21 +155,31 @@
 
     function handleRadioButtonChange(radioButton) {
         if (radioButton.checked) {
+            if (radioButton.name == 'colorSelection')
+                results[currentVideoId-1]['colorSelection'] = radioButton.value;
+            if (radioButton.name == 'geometrySelection')
+                results[currentVideoId-1]['geometrySelection'] = radioButton.value;
+            if (radioButton.name == 'alignSelection')
+                results[currentVideoId-1]['alignSelection'] = radioButton.value;
+            if (radioButton.name == 'overallSelection')
+                results[currentVideoId-1]['overallSelection'] = radioButton.value;
+
+
             // Execute your code here when the radio button is checked
-            results[currentVideoId-1]['which'] = radioButton.value;
+            // results[currentVideoId-1]['which'] = radioButton.value;
             // console.log('Radio button checked:', results[currentVideoId-1]['which']);
         }
     }
 
-    function handleCheckBoxChange(checkbox) {
-        var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
-        results[currentVideoId-1]['reason'] = []
-        checkboxes.forEach(function (checkbox) {
-            results[currentVideoId-1]['reason'].push(checkbox.value);
-            // selectedReasons.push(checkbox.value);
-        });
-        // console.log('Checkbox:', results[currentVideoId-1]['reason']);
-    }
+    // function handleCheckBoxChange(checkbox) {
+    //     var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
+    //     results[currentVideoId-1]['reason'] = []
+    //     checkboxes.forEach(function (checkbox) {
+    //         results[currentVideoId-1]['reason'].push(checkbox.value);
+    //         // selectedReasons.push(checkbox.value);
+    //     });
+    //     // console.log('Checkbox:', results[currentVideoId-1]['reason']);
+    // }
 
     function saveToFile() {
         // selectedVideos = [];
@@ -196,15 +238,18 @@
 
     function showVideoAndPrompt(videoId) {
         // uncheck all buttons
-        var radioButtons = document.querySelectorAll('input[name="which"]');
-        radioButtons.forEach(function(radioButton) {
-            if (radioButton.value == results[videoId-1]['which']) {
-                radioButton.checked = true;
-            } else {
-                radioButton.checked = false;
-            }
+        var all_questions = ["colorSelection", "geometrySelection", "alignSelection", "overallSelection"];
+        for (var i = 0; i < all_questions.length; i++) {
+            var radioButtons = document.querySelectorAll('input[name="' + all_questions[i] + '"]');
+            radioButtons.forEach(function(radioButton) {
+                if (radioButton.value == results[videoId-1][all_questions[i]]) {
+                    radioButton.checked = true;
+                } else {
+                    radioButton.checked = false;
+                }
+            });
+        }
 
-        });
         // uncheck all buttons
         var reasonButtons = document.querySelectorAll('input[name="reason"]');
         // console.log(videoId, results[videoId-1]['reason']);
@@ -222,7 +267,7 @@
         replaceVideo('baseline_video', parseVideoName('assets/' + selected_baseline_method_names[videoId-1] + '/', videoId));
         replaceVideo('our_video', parseVideoName('assets/' + our_method + '/', videoId));
         // changePrompt(videoId.toString() + '. Prompt: ' + prompts[videoId-1]);
-        changePrompt('Prompt ' + videoId.toString() + "/" + total_num_videos.toString() + ": " + prompts[videoId-1]);
+        changePrompt('Text prompt ' + videoId.toString() + "/" + total_num_videos.toString() + ": " + prompts[videoId-1]);
     }
 
     showVideoAndPrompt(1);

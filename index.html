@@ -221,7 +221,7 @@
         replaceVideo('baseline_video', parseVideoName('assets/' + selected_baseline_method_names[videoId-1] + '/', videoId));
         replaceVideo('our_video', parseVideoName('assets/' + our_method + '/', videoId));
         // changePrompt(videoId.toString() + '. Prompt: ' + prompts[videoId-1]);
-        changePrompt('Prompt ' + videoId.toString() + ": " + prompts[videoId-1]);
+        changePrompt('Prompt ' + videoId.toString() + "/" + total_num_videos.toString() + ": " + prompts[videoId-1]);
     }
 
     showVideoAndPrompt(1);

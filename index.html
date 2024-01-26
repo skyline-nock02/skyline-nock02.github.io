@@ -41,20 +41,26 @@
 </head>
 <body>
 
-<p id="prompt">1. Prompt</p>
 
 <div class="video-container">
-    <video id="baseline_video" width="512" height="512" controls autoplay loop muted>
-        <source src="video1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video">
+        <video id="baseline_video" width="512" height="512" controls autoplay loop muted>
+            <source src="video1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <!-- <div class="caption">Video 1</div> -->
+    </div>
 
-    <video id="our_video" width="512" height="512" controls autoplay loop muted>
-        <source src="video1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video">
+        <video id="our_video" width="512" height="512" controls autoplay loop muted>
+            <source src="video1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <!-- <div class="caption">Video 2</div> -->
+    </div>
 </div>
 
+<p id="prompt">1. Prompt</p>
 <!-- <div class="selection-buttons">
     <button onclick="selectVideo(1)">Select Video 1</button>
     <button onclick="selectVideo(2)">Select Video 2</button>
@@ -64,8 +70,8 @@
 <div class="reason-selection" id="reasonSelection">
     <label for="reason">Which video you prefer?</label>
     <ul class="checkbox-list">
-        <li><label><input type="radio" name="which" value="0" onchange="handleRadioButtonChange(this)"> Video 1</label></li>
-        <li><label><input type="radio" name="which" value="1" onchange="handleRadioButtonChange(this)"> Video 2</label></li>
+        <li><label><input type="radio" name="which" value="0" onchange="handleRadioButtonChange(this)"> Left</label></li>
+        <li><label><input type="radio" name="which" value="1" onchange="handleRadioButtonChange(this)"> Right</label></li>
         <li><label><input type="radio" name="which" value="2" onchange="handleRadioButtonChange(this)"> On par</label></li>
     </ul>
 </div>
@@ -74,10 +80,11 @@
     <label for="reason">Why do you prefer this video?</label>
     <ul class="checkbox-list">
         <li><label><input type="checkbox" name="reason" value="0" onchange="handleCheckBoxChange(this)"> Image looks more sharp</label></li>
-        <li><label><input type="checkbox" name="reason" value="1" onchange="handleCheckBoxChange(this)"> Color is more vivid</label></li>
+        <li><label><input type="checkbox" name="reason" value="1" onchange="handleCheckBoxChange(this)"> Colors are more meaningful</label></li>
         <li><label><input type="checkbox" name="reason" value="2" onchange="handleCheckBoxChange(this)"> Less multi-face problem</label></li>
         <li><label><input type="checkbox" name="reason" value="3" onchange="handleCheckBoxChange(this)"> Text and visual are more aligned</label></li>
-        <li><label><input type="checkbox" name="reason" value="4" onchange="handleCheckBoxChange(this)"> Other</label></li>
+        <li><label><input type="checkbox" name="reason" value="3" onchange="handleCheckBoxChange(this)"> Object is more compete</label></li>
+        <li><label><input type="checkbox" name="reason" value="4" onchange="handleCheckBoxChange(this)"> Video is less noisy</label></li>
     </ul>
 </div>
 <div>
@@ -213,7 +220,7 @@
         // console.log(parseVideoName('assets/' + our_method + '/', videoId));
         replaceVideo('baseline_video', parseVideoName('assets/' + selected_baseline_method_names[videoId-1] + '/', videoId));
         replaceVideo('our_video', parseVideoName('assets/' + our_method + '/', videoId));
-        changePrompt(videoId.toString() + '. ' + prompts[videoId-1]);
+        changePrompt(videoId.toString() + '. Prompt: ' + prompts[videoId-1]);
     }
 
     showVideoAndPrompt(1);
@@ -236,7 +243,7 @@
         });
     function changePrompt(prompt) {
         var textBlock = document.getElementById("prompt");
-        textBlock.innerHTML = prompt
+        textBlock.innerHTML = prompt;
     }
 
 </script>

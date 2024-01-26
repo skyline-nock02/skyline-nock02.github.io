@@ -64,24 +64,25 @@
 <div class="reason-selection" id="reasonSelection">
     <label for="reason">Which video you prefer?</label>
     <ul class="checkbox-list">
-        <li><label><input type="radio" name="which" value="0"> Video 1</label></li>
-        <li><label><input type="radio" name="which" value="1"> Video 2</label></li>
-        <li><label><input type="radio" name="which" value="2"> On par</label></li>
+        <li><label><input type="radio" name="which" value="0" onchange="handleRadioButtonChange(this)"> Video 1</label></li>
+        <li><label><input type="radio" name="which" value="1" onchange="handleRadioButtonChange(this)"> Video 2</label></li>
+        <li><label><input type="radio" name="which" value="2" onchange="handleRadioButtonChange(this)"> On par</label></li>
     </ul>
 </div>
 
 <div class="reason-selection" id="reasonSelection">
     <label for="reason">Why do you prefer this video?</label>
     <ul class="checkbox-list">
-        <li><label><input type="checkbox" name="reason" value="0"> Image looks more sharp</label></li>
-        <li><label><input type="checkbox" name="reason" value="1"> Color is more vivid</label></li>
-        <li><label><input type="checkbox" name="reason" value="2"> Less multi-face problem</label></li>
-        <li><label><input type="checkbox" name="reason" value="3"> Other</label></li>
+        <li><label><input type="checkbox" name="reason" value="0" onchange="handleCheckBoxChange(this)"> Image looks more sharp</label></li>
+        <li><label><input type="checkbox" name="reason" value="1" onchange="handleCheckBoxChange(this)"> Color is more vivid</label></li>
+        <li><label><input type="checkbox" name="reason" value="2" onchange="handleCheckBoxChange(this)"> Less multi-face problem</label></li>
+        <li><label><input type="checkbox" name="reason" value="3" onchange="handleCheckBoxChange(this)"> Text and visual are more aligned</label></li>
+        <li><label><input type="checkbox" name="reason" value="4" onchange="handleCheckBoxChange(this)"> Other</label></li>
     </ul>
 </div>
 <button id="previousVideoButton">Previous</button>
 <button id="nextVideoButton">Next</button>
-<button onclick="saveToFile()">Save Results</button>
+<button onclick="saveToFile()">Download Results</button>
 
 <!-- <script type="module" src="./index.js"></script> -->
 
@@ -95,15 +96,40 @@
     selected_baseline_method_names = [];
     var total_num_videos = prompts.length;
 
+    var results = {};
+
     for (let i = 0; i < total_num_videos; i++) {
         var baseline_method_name = baseline_method_names[Math.floor(Math.random()*baseline_method_names.length)];
         selected_baseline_method_names.push(baseline_method_name);
+        results[i] = {
+            "baseline_method_name": baseline_method_name,
+            "which": -1,
+            "reason": [],
+        };
     }
     // console.log(selected_baseline_method_names)
 
-    var selectedReasons = []; // To store the selected reasons
+    // var selectedReasons = []; // To store the selected reasons
 
     var currentVideoId = 1;
+
+    function handleRadioButtonChange(radioButton) {
+        if (radioButton.checked) {
+            // Execute your code here when the radio button is checked
+            results[currentVideoId]['which'] = radioButton.value;
+            console.log('Radio button checked:', results[currentVideoId]['which']);
+        }
+    }
+
+    function handleCheckBoxChange(checkbox) {
+        var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
+        results[currentVideoId]['reason'] = []
+        checkboxes.forEach(function (checkbox) {
+            results[currentVideoId]['reason'].push(checkbox.value);
+            // selectedReasons.push(checkbox.value);
+        });
+        console.log('Checkbox:', results[currentVideoId]['reason']);
+    }
 
     function saveToFile() {
         selectedVideos = [];
@@ -159,6 +185,28 @@
     }
 
     function showVideoAndPrompt(videoId) {
+        // uncheck all buttons
+        var radioButtons = document.querySelectorAll('input[name="which"]');
+        radioButtons.forEach(function(radioButton) {
+            if (radioButton.value == results[videoId]['which']) {
+                radioButton.checked = true;
+            } else {
+                radioButton.checked = false;
+            }
+
+        });
+        // uncheck all buttons
+        var reasonButtons = document.querySelectorAll('input[name="reason"]');
+        // console.log(videoId, results[videoId]['reason']);
+        reasonButtons.forEach(function(reasonButton) {
+            // console.log(reasonButton.value, reasonButton.value in results[videoId]['reason']);
+            if (results[videoId]['reason'].includes(reasonButton.value)) {
+                reasonButton.checked = true;
+            } else {
+                reasonButton.checked = false;
+            }
+        });
+
         // console.log(parseVideoName('assets/' + selected_baseline_method_names[videoId-1] + '/', videoId));
         // console.log(parseVideoName('assets/' + our_method + '/', videoId));
         replaceVideo('baseline_video', parseVideoName('assets/' + selected_baseline_method_names[videoId-1] + '/', videoId));

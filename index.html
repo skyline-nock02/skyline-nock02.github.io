@@ -168,6 +168,7 @@
         while (video.firstChild) {
             video.removeChild(video.firstChild);
         }
+        video.load()
 
         // Create a new source element with the new video file
         var source = document.createElement('source');
@@ -177,7 +178,7 @@
         // Append the new source element to the video
         video.appendChild(source);
 
-        video.play();
+        // video.play();
     }
 
     function parseVideoName(folder_name, videoId) {

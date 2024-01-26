@@ -116,42 +116,43 @@
     function handleRadioButtonChange(radioButton) {
         if (radioButton.checked) {
             // Execute your code here when the radio button is checked
-            results[currentVideoId]['which'] = radioButton.value;
-            console.log('Radio button checked:', results[currentVideoId]['which']);
+            results[currentVideoId-1]['which'] = radioButton.value;
+            // console.log('Radio button checked:', results[currentVideoId-1]['which']);
         }
     }
 
     function handleCheckBoxChange(checkbox) {
         var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
-        results[currentVideoId]['reason'] = []
+        results[currentVideoId-1]['reason'] = []
         checkboxes.forEach(function (checkbox) {
-            results[currentVideoId]['reason'].push(checkbox.value);
+            results[currentVideoId-1]['reason'].push(checkbox.value);
             // selectedReasons.push(checkbox.value);
         });
-        console.log('Checkbox:', results[currentVideoId]['reason']);
+        // console.log('Checkbox:', results[currentVideoId-1]['reason']);
     }
 
     function saveToFile() {
-        selectedVideos = [];
-        var selectedCheckbox = document.querySelector('input[name="which"]:checked');
+        // selectedVideos = [];
+        // var selectedCheckbox = document.querySelector('input[name="which"]:checked');
         
-        if (selectedCheckbox) {
-            selectedVideos.push(selectedCheckbox.value);
-        }
+        // if (selectedCheckbox) {
+        //     selectedVideos.push(selectedCheckbox.value);
+        // }
 
-        selectedReasons = [];
-        var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
-        checkboxes.forEach(function (checkbox) {
-            selectedReasons.push(checkbox.value);
-        });
+        // selectedReasons = [];
+        // var checkboxes = document.querySelectorAll('input[name="reason"]:checked');
+        // checkboxes.forEach(function (checkbox) {
+        //     selectedReasons.push(checkbox.value);
+        // });
 
         // Create a Blob with the selected data
-        var blob = new Blob([`Selected Video: ${selectedVideos.join(", ")}\nReasons: ${selectedReasons.join(", ")}`], { type: "text/plain" });
+        // var blob = new Blob([`Selected Video: ${selectedVideos.join(", ")}\nReasons: ${selectedReasons.join(", ")}`], { type: "text/plain" });
+        var blob = new Blob([JSON.stringify(results)], { type: "text/plain" });
         
         // Create a download link
         var downloadLink = document.createElement("a");
         downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = "user_selection.txt";
+        downloadLink.download = "user_selection.json";
         
         // Trigger the download
         document.body.appendChild(downloadLink);
@@ -188,7 +189,7 @@
         // uncheck all buttons
         var radioButtons = document.querySelectorAll('input[name="which"]');
         radioButtons.forEach(function(radioButton) {
-            if (radioButton.value == results[videoId]['which']) {
+            if (radioButton.value == results[videoId-1]['which']) {
                 radioButton.checked = true;
             } else {
                 radioButton.checked = false;
@@ -197,10 +198,10 @@
         });
         // uncheck all buttons
         var reasonButtons = document.querySelectorAll('input[name="reason"]');
-        // console.log(videoId, results[videoId]['reason']);
+        // console.log(videoId, results[videoId-1]['reason']);
         reasonButtons.forEach(function(reasonButton) {
-            // console.log(reasonButton.value, reasonButton.value in results[videoId]['reason']);
-            if (results[videoId]['reason'].includes(reasonButton.value)) {
+            // console.log(reasonButton.value, reasonButton.value in results[videoId-1]['reason']);
+            if (results[videoId-1]['reason'].includes(reasonButton.value)) {
                 reasonButton.checked = true;
             } else {
                 reasonButton.checked = false;

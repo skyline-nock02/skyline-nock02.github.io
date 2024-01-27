@@ -179,8 +179,14 @@
     for (let i = 0; i < total_num_videos; i++) {
         var baseline_method_name = baseline_method_names[choosen_baselines[i]];
         selected_baseline_method_names.push(baseline_method_name);
+        // var prompt_text_raw = all_prompts[choosen_prompts[i]];
+        // var prompt_text = prompts[i];
+        // var prompt_id = choosen_prompts[i];
         results[i] = {
             "baseline_method_name": baseline_method_name,
+            "baseline_method_id": choosen_baselines[i],
+            "prompt_text": prompts[i],
+            "prompt_id": choosen_prompts[i],
             "colorSelection": "-1",
             "geometrySelection": "-1",
             "alignSelection": "-1",

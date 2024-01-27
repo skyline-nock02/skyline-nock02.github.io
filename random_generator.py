@@ -1,10 +1,10 @@
 import random
 
-# total_prompts = 100
-# total_baselines = 7
+total_prompts = 100
+total_baselines = 7
 
-total_prompts = 50
-total_baselines = 4
+# total_prompts = 50
+# total_baselines = 4
 
 # total_videos = 40
 # random_baselines = []
@@ -76,9 +76,9 @@ for prompt_baseline_final_cut_per_entry in prompt_baseline_final_cut:
     random_prompts.append(random_prompt)
     random_orders.append(random_order)
 
-print(f"random_baselines = {random_baselines}")
-print(f"random_prompts = {random_prompts}")
-print(f"random_orders = {random_orders}")
+print(f"random_baselines = {random_baselines};")
+print(f"random_prompts = {random_prompts};")
+print(f"random_orders = {random_orders};")
 
 # baseline_count = [[0 for _ in range(total_baselines)] for _ in range(total_prompts)]
 # for people_ind in range(total_people):

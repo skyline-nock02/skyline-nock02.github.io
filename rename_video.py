@@ -2,7 +2,7 @@ import glob
 import os
 import json
 from moviepy.editor import VideoFileClip
-folder = '2024_01_23_05_57_00-all/'
+folder = 'new/'
 prompt_mapping = {}
 for method_folder in glob.glob(os.path.join(folder, '*')):
     method_name = os.path.basename(method_folder)

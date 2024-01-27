@@ -74,7 +74,7 @@
     <button onclick="selectVideo(2)">Select Video 2</button>
 </div> -->
 
-<p>(Notes: video might be empty as the generation fails)</p>
+<p>(Note: video might be empty if the generation fails, if this occurs please indicate your preference for the non-failed option. If both fail, do not select either.)</p>
 
 <div class="reason-selection">
     <label for="reason">Which object has more realistic coloring?</label>
@@ -120,6 +120,7 @@
     <br>
     <button id="previousVideoButton">Previous</button>
     <button id="nextVideoButton">Next</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="clearButton">Clear Selection</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="saveToFile()">Download Results!</button>
 </div>
 
@@ -291,17 +292,17 @@
             });
         }
 
-        // uncheck all buttons
-        var reasonButtons = document.querySelectorAll('input[name="reason"]');
-        // console.log(videoId, results[videoId-1]['reason']);
-        reasonButtons.forEach(function(reasonButton) {
-            // console.log(reasonButton.value, reasonButton.value in results[videoId-1]['reason']);
-            if (results[videoId-1]['reason'].includes(reasonButton.value)) {
-                reasonButton.checked = true;
-            } else {
-                reasonButton.checked = false;
-            }
-        });
+        // // uncheck all buttons
+        // var reasonButtons = document.querySelectorAll('input[name="reason"]');
+        // // console.log(videoId, results[videoId-1]['reason']);
+        // reasonButtons.forEach(function(reasonButton) {
+        //     // console.log(reasonButton.value, reasonButton.value in results[videoId-1]['reason']);
+        //     if (results[videoId-1]['reason'].includes(reasonButton.value)) {
+        //         reasonButton.checked = true;
+        //     } else {
+        //         reasonButton.checked = false;
+        //     }
+        // });
 
         // console.log(parseVideoName('assets/' + selected_baseline_method_names[videoId-1] + '/', videoId));
         // console.log(parseVideoName('assets/' + our_method + '/', videoId));
@@ -313,6 +314,13 @@
 
     showVideoAndPrompt(1);
 
+    document.getElementById('clearButton').addEventListener('click', function () {
+        results[currentVideoId-1]['colorSelection'] = "-1";
+        results[currentVideoId-1]['geometrySelection'] = "-1";
+        results[currentVideoId-1]['alignSelection'] = "-1";
+        results[currentVideoId-1]['overallSelection'] = "-1";
+        showVideoAndPrompt(currentVideoId);
+        });
     document.getElementById('nextVideoButton').addEventListener('click', function () {
             if (currentVideoId==total_num_videos) {
                 return;
